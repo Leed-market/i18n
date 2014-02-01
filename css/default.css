@@ -1,0 +1,16 @@
+.i18n_border{
+    border: 1px black solid;
+    padding: 0px 5px 0px 5px;
+}
+.i18n_textleft{
+    text-align: left;
+}
+.i18n_textright{
+    text-align: right;
+}
+.i18n_textcenter{
+    text-align: center;
+}
+.i18n_th{
+    background-color: darkgrey;
+}
