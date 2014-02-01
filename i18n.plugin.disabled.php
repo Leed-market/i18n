@@ -110,7 +110,7 @@ function i18n_plugin_AddForm(){
     if (isset($_POST['plugin_i18n_selectLanguage'])){
         $selectLanguage = $_POST['plugin_i18n_selectLanguage'];
         echo '<hr><h3>Modification du fichier : '.$selectLanguage.'</h3>
-                <pre>Le caractère " (double cote) n\'est pas autorisé dans les traductions.</pre>';
+                <span>Le caractère " (double quote) n\'est pas autorisé dans les traductions.</span>';
 
         // On scan tous les tags de Leed
         $foundTags = array();
