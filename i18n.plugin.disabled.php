@@ -4,7 +4,7 @@
 @author Cobalt74 <cobalt74@gmail.com>
 @link http://www.cobestran.com
 @licence CC by nc sa http://creativecommons.org/licenses/by-nc-sa/2.0/fr/
-@version 1.0.0
+@version 2.0.0
 @description Le plugin i18n permet d'effectuer une traduction de Leed et des plugins en générant les fichiers Json souhaités
 */
 
@@ -28,11 +28,11 @@ function i18n_plugin_AddForm(){
     $newLanguage = '';
     if(isset($_POST['plugin_i18n_newLanguage'])){
         $newLanguage = $_POST['plugin_i18n_newLanguage'];
-        if (is_file('./locale/'.$newLanguage.'.json')){
-            $test['Erreur'][]='Fichier déjà existant ./locale/'.$newLanguage.'.json';
+        if (is_file($newLanguage)){
+            $test['Erreur'][]='Fichier déjà existant '.$newLanguage;
         } else {
-            file_put_contents('./locale/'.$newLanguage.'.json', '');
-            $test['Info'][]='Création du fichier de langue ./locale/'.$newLanguage.'.json : OK';
+            file_put_contents($newLanguage, '');
+            $test['Info'][]='Création du fichier de langue '.$newLanguage.' : OK';
         }
     }
     // Cas validation d'une MAJ d'un fichier de langue
@@ -43,11 +43,11 @@ function i18n_plugin_AddForm(){
         $ModifLanguage = $_['0123456789MAJLanguage'];
         unset($_['0123456789MAJLanguage']);
         //print_r($_);
-        if(is_writable($ModifLanguage.'.json')){
-            file_put_contents($ModifLanguage.'.json', plugin_i18n_json_encode($_));
-            $test['Info'][]='Fichier de langue :'.$_POST['0123456789MAJLanguage'].'.json mis à jour.';
+        if(is_writable($ModifLanguage)){
+            file_put_contents($ModifLanguage, plugin_i18n_json_encode($_));
+            $test['Info'][]='Fichier de langue :'.$_POST['0123456789MAJLanguage'].' mis à jour.';
         } else {
-            $test['Erreur'][]='Le fichier '.$_POST['0123456789MAJLanguage'].'.json n\'est pas accessible en écriture. Veuillez ajouter les droits nécessaire';
+            $test['Erreur'][]='Le fichier '.$_POST['0123456789MAJLanguage'].' n\'est pas accessible en écriture. Veuillez ajouter les droits nécessaire et cliquer sur rafraichir pour relancer l\'opération';
         }
 
     }
@@ -90,15 +90,15 @@ function i18n_plugin_AddForm(){
     echo '<h3>Gestion  des fichiers de langue de Leed</h3>';
 
     echo '<form action="settings.php#i18n" method="POST">
-              <input type="text" value="" name="plugin_i18n_newLanguage">
+              <input type="text" value="" placeholder="./locale/xx.json" name="plugin_i18n_newLanguage">
               <input type="submit" name="plugin_i18n_saveButton" value="Créer un fichier" class="button">
           </form>
           <form action="settings.php#i18n" method="POST">
               <select name="plugin_i18n_selectLanguage">';
 
                 $filesLeed = glob('./locale/*.json');
+                $filesLeed = array_merge($filesLeed,glob('./plugins/*/locale/*.json'));
                 foreach($filesLeed as $file){
-                    $file = str_replace('.json', '', $file);
                     echo '<option value="'.$file.'">'.$file.'</option>';
                 }
 
@@ -114,9 +114,9 @@ function i18n_plugin_AddForm(){
 
         // On scan tous les tags de Leed
         $foundTags = array();
-        $foundTags = plugin_i18n_scanTags('./');
+        $foundTags = plugin_i18n_scanTags(dirname($selectLanguage).'/../', 'plugins');
         // On charge le fichier de langue existant
-        $currentLanguage = json_decode(file_get_contents($selectLanguage.'.json'),true);
+        $currentLanguage = json_decode(file_get_contents($selectLanguage),true);
         ksort($currentLanguage);
 
         echo '<hr><h4>Clés présentes</h4>
@@ -175,14 +175,15 @@ function i18n_plugin_AddForm(){
 }
 
 // scanner les tags de traduction dans Leed
-function plugin_i18n_scanTags($dir){
+function plugin_i18n_scanTags($dir, $exclude=''){
     $return = array();
     $extensions = array('html','php','js');
     $leedFiles = scandir($dir);
+    //var_dump($leedFiles);
     foreach($leedFiles as $file){
-        if($file!='.' && $file!='..' && $file!='.git'){
+        if($file!='.' && $file!='..' && $file!='.git' && $file!=$exclude){
             if(is_dir($dir.$file)){
-                $return = array_merge($return,plugin_i18n_scanTags($dir.$file.'/'));
+                $return = array_merge($return,plugin_i18n_scanTags($dir.$file.'/', $exclude));
             }else{
                 $ext = str_replace('.rtpl.php','.wrongphp',$file);
                 $ext = strtolower(substr($ext,strrpos($ext,'.')+1));

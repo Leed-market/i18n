@@ -14,4 +14,5 @@ Instructions
 Version
 =======
 
+* v2.0.0  -  Prise en charge des fichiers de langue des plugins
 * v1.0.0  -  Développement Initial
