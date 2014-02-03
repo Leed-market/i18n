@@ -14,6 +14,7 @@ Instructions
 Version
 =======
 
+* v2.2.0  -  Ajout d'un fonction de copy de fichier de langue source vers cible
 * v2.1.0  -  Internationalisation de lui même :D
 * v2.0.0  -  Prise en charge des fichiers de langue des plugins
 * v1.0.0  -  Développement Initial

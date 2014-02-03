@@ -1,7 +1,9 @@
 {
+ "P_I18N_BTN_COPY_FILE":"Copy file",
  "P_I18N_BTN_CREATE_FILE":"Create a file",
  "P_I18N_BTN_LOAD_FILE":"Load file",
  "P_I18N_BTN_UPD_FILE":"Edit translation",
+ "P_I18N_COPY_TO":"to",
  "P_I18N_KEY_CODE_NB_KEY":"Leed ($1 Tags)",
  "P_I18N_KEY_FILE_NB_KEY":"Language file ($1 Tags)",
  "P_I18N_KEY_INFILE_NOTFND_TITLE":"Key missing / obsolete",

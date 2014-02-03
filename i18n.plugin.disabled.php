@@ -4,7 +4,7 @@
 @author Cobalt74 <cobalt74@gmail.com>
 @link http://www.cobestran.com
 @licence CC by nc sa http://creativecommons.org/licenses/by-nc-sa/2.0/fr/
-@version 2.1.0
+@version 2.2.0
 @description Le plugin i18n permet d'effectuer une traduction de Leed et des plugins en générant les fichiers Json souhaités
 */
 
@@ -33,6 +33,18 @@ function i18n_plugin_AddForm(){
         } else {
             file_put_contents($newLanguage, '');
             $test['Info'][]=_t('P_I18N_NEW_LNG_FILE_OK', array($newLanguage));
+        }
+    }
+    // Cas d'une copy de fichier
+    if(isset($_POST['plugin_i18n_copyLanguage'])){
+        $copyLanguage = $_POST['plugin_i18n_copyLanguage'];
+        $fileDest = $_POST['plugin_i18n_copyFileDest'];
+
+        if (is_file($fileDest)){
+            $test['Erreur'][]=_t('P_I18N_NEW_LNG_FILE_EXIST').$fileDest;
+        } else {
+            copy($copyLanguage, $fileDest);
+            $test['Info'][]=_t('P_I18N_NEW_LNG_FILE_OK', array($fileDest));
         }
     }
     // Cas validation d'une MAJ d'un fichier de langue
@@ -90,14 +102,27 @@ function i18n_plugin_AddForm(){
     echo '<h3>'._t('P_I18N_MANAGE_LNG_TITLE').'</h3>';
 
     echo '<form action="settings.php#i18n" method="POST">
-              <input type="text" value="" placeholder="./locale/xx.json" name="plugin_i18n_newLanguage">
+              <input type="text" value="" placeholder="ex : ./locale/xx.json" name="plugin_i18n_newLanguage">
               <input type="submit" name="plugin_i18n_saveButton" value="'._t('P_I18N_BTN_CREATE_FILE').'" class="button">
+          </form>
+          <form action="settings.php#i18n" method="POST">
+              <select name="plugin_i18n_copyLanguage">';
+
+                $filesLeed = glob('./locale/*.json');
+                $filesLeed = array_merge($filesLeed,glob('./plugins/*/locale/*.json'));
+                foreach($filesLeed as $file){
+                    echo '<option value="'.$file.'">'.$file.'</option>';
+                }
+
+    echo '    </select> '._t('P_I18N_COPY_TO').'
+              <input type="text" value="" placeholder="ex: ./locale/xx.json" name="plugin_i18n_copyFileDest">
+              <input type="submit" value="'._t('P_I18N_BTN_COPY_FILE').'" class="button">
           </form>
           <form action="settings.php#i18n" method="POST">
               <select name="plugin_i18n_selectLanguage">';
 
-                $filesLeed = glob('./locale/*.json');
-                $filesLeed = array_merge($filesLeed,glob('./plugins/*/locale/*.json'));
+                //$filesLeed = glob('./locale/*.json');
+                //$filesLeed = array_merge($filesLeed,glob('./plugins/*/locale/*.json'));
                 foreach($filesLeed as $file){
                     if ($_POST['plugin_i18n_selectLanguage']==$file)
                     {
