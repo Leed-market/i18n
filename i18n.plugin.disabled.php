@@ -4,14 +4,14 @@
 @author Cobalt74 <cobalt74@gmail.com>
 @link http://www.cobestran.com
 @licence CC by nc sa http://creativecommons.org/licenses/by-nc-sa/2.0/fr/
-@version 2.0.0
+@version 2.1.0
 @description Le plugin i18n permet d'effectuer une traduction de Leed et des plugins en générant les fichiers Json souhaités
 */
 
 
 // affichage d'un lien dans le menu "Gestion"
 function i18n_plugin_AddLink(){
-	echo '<li><a class="toggle" href="#i18n">Plugin de Traduction de Leed</a></li>';
+	echo '<li><a class="toggle" href="#i18n">'._t('P_I18N_PREF_TITLE').'</a></li>';
 }
 
 // affichage des option de recherche et du formulaire
@@ -19,7 +19,7 @@ function i18n_plugin_AddForm(){
     $test = array();
 
     echo '<section id="i18n" name="i18n" class="i18n">
-			<h2>Plugin de traduction de Leed</h2>';
+			<h2>'._t('P_I18N_PREF_TITLE').'</h2>';
 
     /* -------------------------------------------------------- */
     // Gestion des retours des formulaires
@@ -29,10 +29,10 @@ function i18n_plugin_AddForm(){
     if(isset($_POST['plugin_i18n_newLanguage'])){
         $newLanguage = $_POST['plugin_i18n_newLanguage'];
         if (is_file($newLanguage)){
-            $test['Erreur'][]='Fichier déjà existant '.$newLanguage;
+            $test['Erreur'][]=_t('P_I18N_NEW_LNG_FILE_EXIST').$newLanguage;
         } else {
             file_put_contents($newLanguage, '');
-            $test['Info'][]='Création du fichier de langue '.$newLanguage.' : OK';
+            $test['Info'][]=_t('P_I18N_NEW_LNG_FILE_OK', array($newLanguage));
         }
     }
     // Cas validation d'une MAJ d'un fichier de langue
@@ -45,34 +45,34 @@ function i18n_plugin_AddForm(){
         //print_r($_);
         if(is_writable($ModifLanguage)){
             file_put_contents($ModifLanguage, plugin_i18n_json_encode($_));
-            $test['Info'][]='Fichier de langue :'.$_POST['0123456789MAJLanguage'].' mis à jour.';
+            $test['Info'][]=_t('P_I18N_UPD_LNG_FILE_OK', array($_POST['0123456789MAJLanguage']));
         } else {
-            $test['Erreur'][]='Le fichier '.$_POST['0123456789MAJLanguage'].' n\'est pas accessible en écriture. Veuillez ajouter les droits nécessaire et cliquer sur rafraichir pour relancer l\'opération';
+            $test['Erreur'][]=_t('P_I18N_UPD_LNG_FILE_ERR', array($_POST['0123456789MAJLanguage']));
         }
 
     }
 
     // Gestion des erreurs PHP possible permettant l'écriture de fichier dans les répertoires de Leed
     if(!is_writable('./locale/')){
-        $test['Erreur'][]='Écriture impossible dans le répertoire /locale/, veuillez ajouter les permissions en écriture sur le dossier.';
+        $test['Erreur'][]=_t('P_I18N_VERIF_ERR1');
     }
     if (!@function_exists('file_get_contents')){
-        $test['Erreur'][] = 'La fonction requise "file_get_contents" est inaccessible sur votre serveur, vérifiez votre version de PHP.';
+        $test['Erreur'][] = _t('P_I18N_VERIF_ERR2');
     }
     if (!@function_exists('file_put_contents')){
-        $test['Erreur'][] = 'La fonction requise "file_put_contents" est inaccessible sur votre serveur, vérifiez votre version de PHP.';
+        $test['Erreur'][] = _t('P_I18N_VERIF_ERR2');
     }
     if (@version_compare(PHP_VERSION, '5.1.0') <= 0){
-        $test['Erreur'][] = 'Votre version de PHP ('.PHP_VERSION.') est trop ancienne, il est possible que certaines fonctionnalités du script comportent des dysfonctionnements.';
+        $test['Erreur'][] = _t('P_I18N_VERIF_ERR3', array(PHP_VERSION));
     }
     if(ini_get('safe_mode') && ini_get('max_execution_time')!=0){
-        $test['Erreur'][] = 'Le script ne peux pas gérer le timeout tout seul car votre safe mode est activé,<br/> dans votre fichier de configuration PHP, mettez la variable max_execution_time à 0 ou désactivez le safemode.';
+        $test['Erreur'][] = _t('P_I18N_VERIF_ERR4');
     }
 
     if (count($test)!=0){
         echo '<div id="result_i18n" class="result_i18n">
                   <table>
-                      <th class="i18n_border i18n_th">Message(s)</th>';
+                      <th class="i18n_border i18n_th">'._t('P_I18N_MESSAGES').'</th>';
 
         foreach($test as $type=>$messages){
             echo '<tr>';
@@ -87,11 +87,11 @@ function i18n_plugin_AddForm(){
     }
 
     // Sélectionner la langue ou saisir une nouvelle langue
-    echo '<h3>Gestion  des fichiers de langue de Leed</h3>';
+    echo '<h3>'._t('P_I18N_MANAGE_LNG_TITLE').'</h3>';
 
     echo '<form action="settings.php#i18n" method="POST">
               <input type="text" value="" placeholder="./locale/xx.json" name="plugin_i18n_newLanguage">
-              <input type="submit" name="plugin_i18n_saveButton" value="Créer un fichier" class="button">
+              <input type="submit" name="plugin_i18n_saveButton" value="'._t('P_I18N_BTN_CREATE_FILE').'" class="button">
           </form>
           <form action="settings.php#i18n" method="POST">
               <select name="plugin_i18n_selectLanguage">';
@@ -99,18 +99,23 @@ function i18n_plugin_AddForm(){
                 $filesLeed = glob('./locale/*.json');
                 $filesLeed = array_merge($filesLeed,glob('./plugins/*/locale/*.json'));
                 foreach($filesLeed as $file){
-                    echo '<option value="'.$file.'">'.$file.'</option>';
+                    if ($_POST['plugin_i18n_selectLanguage']==$file)
+                    {
+                        echo '<option selected=selected value="'.$file.'">'.$file.'</option>';
+                    } else {
+                        echo '<option value="'.$file.'">'.$file.'</option>';
+                    }
                 }
 
     echo '    </select>
-              <input type="submit" value="Charger fichier" class="button">
+              <input type="submit" value="'._t('P_I18N_BTN_LOAD_FILE').'" class="button">
           </form>';
 
     // sélection d'un langage à charger
     if (isset($_POST['plugin_i18n_selectLanguage'])){
         $selectLanguage = $_POST['plugin_i18n_selectLanguage'];
-        echo '<hr><h3>Modification du fichier : '.$selectLanguage.'</h3>
-                <span>Le caractère " (double quote) n\'est pas autorisé dans les traductions.</span>';
+        echo '<hr><h3>'._t('P_I18N_UPD_FILE_TITLE', array($selectLanguage)).'</h3>
+                <span>'._t('P_I18N_MSG_ALERT').'</span>';
 
         // On scan tous les tags de Leed
         $foundTags = array();
@@ -119,13 +124,13 @@ function i18n_plugin_AddForm(){
         $currentLanguage = json_decode(file_get_contents($selectLanguage),true);
         ksort($currentLanguage);
 
-        echo '<hr><h4>Clés présentes</h4>
+        echo '<hr><h4>'._t('P_I18N_KEY_INFILE_TITLE').'</h4>
               <form action="settings.php#i18n" method="POST">
               <input type="hidden" name="0123456789MAJLanguage" value="'.$selectLanguage.'">
               <table class="diffTab">
                 <tr>
-                    <th class="i18n_border i18n_th">Fichier Langue ( '.count($currentLanguage).' Tags)</th>
-                    <th class="i18n_border i18n_th">Leed ( '.count($foundTags).' Tags)</th>
+                    <th class="i18n_border i18n_th">'._t('P_I18N_KEY_FILE_NB_KEY',array(count($currentLanguage))).'</th>
+                    <th class="i18n_border i18n_th">'._t('P_I18N_KEY_CODE_NB_KEY',array(count($foundTags))).'</th>
                 </tr>';
 
         foreach($currentLanguage as $key=>$value){
@@ -143,18 +148,18 @@ function i18n_plugin_AddForm(){
         }
         echo '</table>';
 
-        echo '<hr><h4>Clés absentes / obsolètes</h4>
+        echo '<hr><h4>'._t('P_I18N_KEY_INFILE_NOTFND_TITLE').'</h4>
               <table class="diffTab">
                 <tr>
-                    <th class="i18n_border i18n_th">Fichier Langue ( '.count($currentLanguage).' Tags)</th>
-                    <th class="i18n_border i18n_th">Leed ( '.count($foundTags).' Tags)</th>
+                    <th class="i18n_border i18n_th">'._t('P_I18N_KEY_FILE_NB_KEY',array(count($currentLanguage))).'</th>
+                    <th class="i18n_border i18n_th">'._t('P_I18N_KEY_CODE_NB_KEY',array(count($foundTags))).'</th>
                 </tr>';
 
         // recherche des tags existant mais non trouvé dans la recherche du code
         foreach ($currentLanguage as $key => $value) {
             if(!in_array($key, $foundTags, true)){
                 echo '<tr><td class="i18n_border i18n_textcenter">'.$key.'</td>
-                          <td class="i18n_border i18n_textcenter">'.$value.'<br />(non trouvé dans le code)</td>
+                          <td class="i18n_border i18n_textcenter">'.$value.'<br />'._t('P_I18N_MSG_NOT_FND_CODE').'</td>
                       </tr>';
             }
         }
@@ -167,7 +172,7 @@ function i18n_plugin_AddForm(){
             }
         }
         echo '</table>
-              <input type="submit" value="Modifier la traduction" class="button">
+              <input type="submit" value="'._t('P_I18N_BTN_UPD_FILE').'" class="button">
               </form>';
 
     }

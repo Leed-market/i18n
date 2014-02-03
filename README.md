@@ -14,5 +14,6 @@ Instructions
 Version
 =======
 
+* v2.1.0  -  Internationalisation de lui même :D
 * v2.0.0  -  Prise en charge des fichiers de langue des plugins
 * v1.0.0  -  Développement Initial
