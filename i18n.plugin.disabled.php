@@ -4,7 +4,7 @@
 @author Cobalt74 <cobalt74@gmail.com>
 @link http://www.cobestran.com
 @licence CC by nc sa http://creativecommons.org/licenses/by-nc-sa/2.0/fr/
-@version 2.2.0
+@version 2.2.1
 @description Le plugin i18n permet d'effectuer une traduction de Leed et des plugins en générant les fichiers Json souhaités
 */
 
@@ -33,6 +33,7 @@ function i18n_plugin_AddForm(){
         } else {
             file_put_contents($newLanguage, '');
             $test['Info'][]=_t('P_I18N_NEW_LNG_FILE_OK', array($newLanguage));
+            $_POST['plugin_i18n_selectLanguage']=$newLanguage;
         }
     }
     // Cas d'une copy de fichier
@@ -43,8 +44,13 @@ function i18n_plugin_AddForm(){
         if (is_file($fileDest)){
             $test['Erreur'][]=_t('P_I18N_NEW_LNG_FILE_EXIST').$fileDest;
         } else {
-            copy($copyLanguage, $fileDest);
-            $test['Info'][]=_t('P_I18N_NEW_LNG_FILE_OK', array($fileDest));
+            if (is_writable(dirname($fileDest))){
+                copy($copyLanguage, $fileDest);
+                $test['Info'][]=_t('P_I18N_NEW_LNG_FILE_OK', array($fileDest));
+                $_POST['plugin_i18n_selectLanguage']=$fileDest;
+            } else {
+                $test['Erreur'][]=_t('P_I18N_VERIF_ERR1').' '.$fileDest;
+            }
         }
     }
     // Cas validation d'une MAJ d'un fichier de langue
@@ -58,6 +64,7 @@ function i18n_plugin_AddForm(){
         if(is_writable($ModifLanguage)){
             file_put_contents($ModifLanguage, plugin_i18n_json_encode($_));
             $test['Info'][]=_t('P_I18N_UPD_LNG_FILE_OK', array($_POST['0123456789MAJLanguage']));
+            $_POST['plugin_i18n_selectLanguage']=$ModifLanguage;
         } else {
             $test['Erreur'][]=_t('P_I18N_UPD_LNG_FILE_ERR', array($_POST['0123456789MAJLanguage']));
         }

@@ -18,7 +18,7 @@
  "P_I18N_UPD_FILE_TITLE":"Modification du fichier : $1",
  "P_I18N_UPD_LNG_FILE_ERR":"Le fichier $1 n'est pas accessible en écriture. Veuillez ajouter les droits nécessaires et cliquer sur rafraichir pour relancer l'opération",
  "P_I18N_UPD_LNG_FILE_OK":"Fichier de langue : $1 mis à jour.",
- "P_I18N_VERIF_ERR1":"Écriture impossible dans le répertoire /locale/, veuillez ajouter les permissions en écriture sur le dossier.",
+ "P_I18N_VERIF_ERR1":"Écriture impossible dans le répertoire indiqué, veuillez ajouter les permissions en écriture sur le dossier.",
  "P_I18N_VERIF_ERR2":"La fonction requise 'file_get_contents' est inaccessible sur votre serveur, vérifiez votre version de PHP.",
  "P_I18N_VERIF_ERR3":"Votre version de PHP $1 est trop ancienne, il est possible que certaines fonctionnalités du script comportent des dysfonctionnements.",
  "P_I18N_VERIF_ERR4":"Le script ne peux pas gérer le timeout tout seul car votre safe mode est activé,<br/> dans votre fichier de configuration PHP, mettez la variable max_execution_time à 0 ou désactivez le safemode."

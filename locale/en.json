@@ -18,7 +18,7 @@
  "P_I18N_UPD_FILE_TITLE":"Modification of file : $1",
  "P_I18N_UPD_LNG_FILE_ERR":"The file $1 is not writable. Please add the necessary rights and click refresh to restart the operation",
  "P_I18N_UPD_LNG_FILE_OK":"Language file: $1 updated.",
- "P_I18N_VERIF_ERR1":"Can't write to the directory /locale/, please add write permissions on the folder.",
+ "P_I18N_VERIF_ERR1":"Can't write to the specified directory, please add write permissions on the folder.",
  "P_I18N_VERIF_ERR2":"The required function 'file_get_contents' is inaccessible on your server, check your version of PHP.",
  "P_I18N_VERIF_ERR3":"Your version of PHP $1 is too old, it's possible that some features of the script include malfunctions.",
  "P_I18N_VERIF_ERR4":"The script can't handle the timeout alone because your safe mode is enabled, <br/> in your PHP configuration file, set the max_execution_time variable to 0 or disable safemode."
