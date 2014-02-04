@@ -4,7 +4,7 @@
 @author Cobalt74 <cobalt74@gmail.com>
 @link http://www.cobestran.com
 @licence CC by nc sa http://creativecommons.org/licenses/by-nc-sa/2.0/fr/
-@version 2.2.2
+@version 2.3.0
 @description Le plugin i18n permet d'effectuer une traduction de Leed et des plugins en générant les fichiers Json souhaités
 */
 
@@ -24,6 +24,18 @@ function i18n_plugin_AddForm(){
     /* -------------------------------------------------------- */
     // Gestion des retours des formulaires
     /* -------------------------------------------------------- */
+    // cas de changement de la langue de Leed
+    if(isset($_POST['plugin_i18n_changeLngLeed'])){
+        $langue = substr(basename($_POST['plugin_i18n_changeLngLeed']),0,2);
+        $content = file_get_contents('constant.php');
+        $content = preg_replace('#define\(\'LANGUAGE\',\'([a-z]+)\'\);?#','define(\'LANGUAGE\',\''.$langue.'\')', $content);
+        if (is_writable('constant.php')){
+            file_put_contents('constant.php', $content);
+            $test['info'][]=_t('P_I18N_MSG_CHG_LNG_LEED');
+        } else {
+            $test['Erreur'][]=_t('P_I18N_UPD_LNG_FILE_ERR',array('<b>constant.php</b>'));
+        }
+    }
     // Cas validation de la création d'une langue sur Leed.
     $newLanguage = '';
     if(isset($_POST['plugin_i18n_newLanguage'])){
@@ -57,10 +69,9 @@ function i18n_plugin_AddForm(){
     if(isset($_POST['0123456789MAJLanguage'])){
 
         $_ = array_map('addslashes',array_merge($_GET, $_POST));
-        //$_ = array_merge($_GET, $_POST);
+        ksort($_);
         $ModifLanguage = $_['0123456789MAJLanguage'];
         unset($_['0123456789MAJLanguage']);
-        //print_r($_);
         if(is_writable($ModifLanguage)){
             file_put_contents($ModifLanguage, plugin_i18n_json_encode($_));
             $test['Info'][]=_t('P_I18N_UPD_LNG_FILE_OK', array($_POST['0123456789MAJLanguage']));
@@ -109,6 +120,22 @@ function i18n_plugin_AddForm(){
     echo '<h3>'._t('P_I18N_MANAGE_LNG_TITLE').'</h3>';
 
     echo '<form action="settings.php#i18n" method="POST">
+              <select name="plugin_i18n_changeLngLeed">';
+
+                $filesLeed = glob('./locale/*.json');
+                foreach($filesLeed as $file){
+                    if ($file=='./locale/'.LANGUAGE.'.json')
+                    {
+                        echo '<option selected=selected value="'.$file.'">'.$file.'</option>';
+                    } else {
+                        echo '<option value="'.$file.'">'.$file.'</option>';
+                    }
+                }
+
+    echo'     </select>
+              <input type="submit" name="plugin_i18n_chgLngLeed" value="'._t('P_I18N_BTN_CHG_LNG_LEED').'" class="button">
+          </form>
+          <form action="settings.php#i18n" method="POST">
               <input type="text" value="" placeholder="ex : ./locale/xx.json" name="plugin_i18n_newLanguage">
               <input type="submit" name="plugin_i18n_saveButton" value="'._t('P_I18N_BTN_CREATE_FILE').'" class="button">
           </form>

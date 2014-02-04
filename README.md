@@ -14,6 +14,7 @@ Instructions
 Version
 =======
 
+* v2.3.0  -  Ajout de la possiblité de changer la langue de Leed
 * v2.2.2  -  garder la valeur de la liste pour la copy
 * v2.2.1  -  Ajout contrôle sur la copy. répertoire dispo en écriture
 * v2.2.0  -  Ajout d'un fonction de copy de fichier de langue source vers cible
