@@ -18,10 +18,18 @@
 }
 
 .i18n_border textarea{
-    width: 300px;
+    width: 350px;
     height: 100px;
 }
 
 .i18n_border input{
-    width: 300px;
+    width: 350px;
+}
+
+.i18n_info {
+    background-color: greenyellow;
+}
+
+.i18n_warn {
+    background-color: gold;
 }

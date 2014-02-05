@@ -4,7 +4,7 @@
 @author Cobalt74 <cobalt74@gmail.com>
 @link http://www.cobestran.com
 @licence CC by nc sa http://creativecommons.org/licenses/by-nc-sa/2.0/fr/
-@version 2.3.0
+@version 2.3.1
 @description Le plugin i18n permet d'effectuer une traduction de Leed et des plugins en générant les fichiers Json souhaités
 */
 
@@ -107,7 +107,7 @@ function i18n_plugin_AddForm(){
         foreach($test as $type=>$messages){
             echo '<tr>';
             foreach($messages as $message){
-                echo '<td class="i18n_border">'.$message.'</td>';
+                echo '<td class="i18n_border '.($type=='Erreur'?'i18n_warn':'i18n_info').'">'.$message.'</td>';
             }
             echo '</tr>';
         }
