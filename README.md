@@ -24,6 +24,8 @@ Version
 * v2.0.0  -  Prise en charge des fichiers de langue des plugins
 * v1.0.0  -  Développement Initial
 
-Auteur
+Auteurs
 =======
 @Cobalt74 - cobalt74 at gmail dot com - www.cobestran.com
+
+Traduction Espagnole - @Phyks
