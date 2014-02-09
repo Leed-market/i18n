@@ -33,3 +33,18 @@
 .i18n_warn {
     background-color: gold;
 }
+
+.i18n_a a {
+    background-color: #f16529;
+    border: 0px;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 3px 8px 3px 8px;
+    font-size: 10px;
+    font-weight: bold;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    min-width: 35px;
+    text-align: center;
+}

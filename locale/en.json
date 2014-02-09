@@ -17,6 +17,7 @@
  "P_I18N_NEW_LNG_FILE_EXIST":"File already exists",
  "P_I18N_NEW_LNG_FILE_OK":"Creating the language file $1 : OK",
  "P_I18N_PREF_TITLE":"Translation Plugin Leed",
+ "P_I18N_TRANSLATE":"Translate",
  "P_I18N_UPD_FILE_TITLE":"Modification of file : $1",
  "P_I18N_UPD_LNG_FILE_ERR":"The file $1 is not writable.<br />Please add the necessary rights and click refresh to restart the operation",
  "P_I18N_UPD_LNG_FILE_OK":"Language file: $1 updated.",
