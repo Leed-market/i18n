@@ -4,7 +4,7 @@
 @author Cobalt74 <cobalt74@gmail.com>
 @link http://www.cobestran.com
 @licence CC by nc sa http://creativecommons.org/licenses/by-nc-sa/2.0/fr/
-@version 2.4.0
+@version 2.4.1
 @description Le plugin i18n permet d'effectuer une traduction de Leed et des plugins en générant les fichiers Json souhaités
 */
 
@@ -145,7 +145,7 @@ function i18n_plugin_AddForm(){
                 $filesLeed = glob('./locale/*.json');
                 $filesLeed = array_merge($filesLeed,glob('./plugins/*/locale/*.json'));
                 foreach($filesLeed as $file){
-                    if ($_POST['plugin_i18n_selectLanguage']==$file)
+                    if (isset($_POST['plugin_i18n_selectLanguage']) && $_POST['plugin_i18n_selectLanguage']==$file)
                     {
                         echo '<option selected=selected value="'.$file.'">'.$file.'</option>';
                     } else {
@@ -163,7 +163,7 @@ function i18n_plugin_AddForm(){
                 //$filesLeed = glob('./locale/*.json');
                 //$filesLeed = array_merge($filesLeed,glob('./plugins/*/locale/*.json'));
                 foreach($filesLeed as $file){
-                    if ($_POST['plugin_i18n_selectLanguage']==$file)
+                    if (isset($_POST['plugin_i18n_selectLanguage']) && $_POST['plugin_i18n_selectLanguage']==$file)
                     {
                         echo '<option selected=selected value="'.$file.'">'.$file.'</option>';
                     } else {

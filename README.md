@@ -19,6 +19,7 @@ Instructions
 Version
 =======
 
+* v2.4.1  -  Correction notice php
 * v2.4.0  -  Ajout de la fonction de traduction avec google.
 * v2.3.1  -  Typo
 * v2.3.0  -  Ajout de la possiblité de changer la langue de Leed
