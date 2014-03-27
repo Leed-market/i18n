@@ -1,10 +1,10 @@
 <?php
 /*
 @name i18n
-@author Cobalt74 <cobalt74@gmail.com>
+@author Cobalt74 <http://www.cobestran.com>
 @link http://www.cobestran.com
 @licence CC by nc sa http://creativecommons.org/licenses/by-nc-sa/2.0/fr/
-@version 2.4.1
+@version 2.5.0
 @description Le plugin i18n permet d'effectuer une traduction de Leed et des plugins en générant les fichiers Json souhaités
 */
 
@@ -17,6 +17,8 @@ function i18n_plugin_AddLink(){
 // affichage des option de recherche et du formulaire
 function i18n_plugin_AddForm(){
     $test = array();
+    $configuration = new Configuration();
+    $configuration->getAll();
 
     echo '<section id="i18n" name="i18n" class="i18n">
 			<h2>'._t('P_I18N_PREF_TITLE').'</h2>';
@@ -27,14 +29,8 @@ function i18n_plugin_AddForm(){
     // cas de changement de la langue de Leed
     if(isset($_POST['plugin_i18n_changeLngLeed'])){
         $langue = substr(basename($_POST['plugin_i18n_changeLngLeed']),0,2);
-        $content = file_get_contents('constant.php');
-        $content = preg_replace('#define\(\'LANGUAGE\',\'([a-z]+)\'\);?#','define(\'LANGUAGE\',\''.$langue.'\')', $content);
-        if (is_writable('constant.php')){
-            file_put_contents('constant.php', $content);
-            $test['info'][]=_t('P_I18N_MSG_CHG_LNG_LEED');
-        } else {
-            $test['Erreur'][]=_t('P_I18N_UPD_LNG_FILE_ERR',array('<b>constant.php</b>'));
-        }
+        $configuration->put('language',$langue);
+        $test['info'][]=_t('P_I18N_MSG_CHG_LNG_LEED');
     }
     // Cas validation de la création d'une langue sur Leed.
     $newLanguage = '';
@@ -124,7 +120,7 @@ function i18n_plugin_AddForm(){
 
                 $filesLeed = glob('./locale/*.json');
                 foreach($filesLeed as $file){
-                    if ($file=='./locale/'.LANGUAGE.'.json')
+                    if ($file=='./locale/'.$configuration->get('language').'.json')
                     {
                         echo '<option selected=selected value="'.$file.'">'.$file.'</option>';
                     } else {
