@@ -79,7 +79,7 @@ function i18n_plugin_AddForm(){
     }
 
     // Gestion des erreurs PHP possible permettant l'écriture de fichier dans les répertoires de Leed
-    if(!is_writable('./locale/')){
+    if(!is_writable('./install/locale/')){
         $test['Erreur'][]=_t('P_I18N_VERIF_ERR1');
     }
     if (!@function_exists('file_get_contents')){
