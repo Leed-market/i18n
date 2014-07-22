@@ -19,6 +19,7 @@ Instructions
 Version
 =======
 
+* v2.6.0  -  Gestion de la séparation des fichiers de langues (install / plugins / templates)
 * v2.5.0  -  compatibilité v1.7 - MAJ changement de langue
 * v2.4.1  -  Correction notice php
 * v2.4.0  -  Ajout de la fonction de traduction avec google.

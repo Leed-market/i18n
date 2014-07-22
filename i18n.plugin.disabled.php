@@ -4,7 +4,7 @@
 @author Cobalt74 <http://www.cobestran.com>
 @link http://www.cobestran.com
 @licence CC by nc sa http://creativecommons.org/licenses/by-nc-sa/2.0/fr/
-@version 2.5.0
+@version 2.6.0
 @description Le plugin i18n permet d'effectuer une traduction de Leed et des plugins en générant les fichiers Json souhaités
 */
 
@@ -14,7 +14,7 @@ function i18n_plugin_AddLink(){
 	echo '<li><a class="toggle" href="#i18n">'._t('P_I18N_PREF_TITLE').'</a></li>';
 }
 
-// affichage des option de recherche et du formulaire
+// affichage des options de recherche et du formulaire
 function i18n_plugin_AddForm(){
     $test = array();
     $configuration = new Configuration();
@@ -118,9 +118,9 @@ function i18n_plugin_AddForm(){
     echo '<form action="settings.php#i18n" method="POST">
               <select name="plugin_i18n_changeLngLeed">';
 
-                $filesLeed = glob('./locale/*.json');
+                $filesLeed = glob('./templates/'.$configuration->get('theme').'/locale/*.json');
                 foreach($filesLeed as $file){
-                    if ($file=='./locale/'.$configuration->get('language').'.json')
+                    if ($file=='./templates/'.$configuration->get('theme').'/locale/'.$configuration->get('language').'.json')
                     {
                         echo '<option selected=selected value="'.$file.'">'.$file.'</option>';
                     } else {
@@ -131,15 +131,16 @@ function i18n_plugin_AddForm(){
     echo'     </select>
               <input type="submit" name="plugin_i18n_chgLngLeed" value="'._t('P_I18N_BTN_CHG_LNG_LEED').'" class="button">
           </form>
+          <h3>'._t('P_I18N_CREA_FIC_LNG').'</h3>
           <form action="settings.php#i18n" method="POST">
-              <input type="text" value="" placeholder="ex : ./locale/xx.json" name="plugin_i18n_newLanguage">
+              <input type="text" value="" placeholder="./templates/theme/locale/xx.json" name="plugin_i18n_newLanguage">
               <input type="submit" name="plugin_i18n_saveButton" value="'._t('P_I18N_BTN_CREATE_FILE').'" class="button">
           </form>
+          <h3>'._t('P_I18N_MANAGE_TEMPLATE_LNG').'</h3>
           <form action="settings.php#i18n" method="POST">
               <select name="plugin_i18n_copyLanguage">';
 
-                $filesLeed = glob('./locale/*.json');
-                $filesLeed = array_merge($filesLeed,glob('./plugins/*/locale/*.json'));
+                $filesLeed = glob('./templates/*/locale/*.json');
                 foreach($filesLeed as $file){
                     if (isset($_POST['plugin_i18n_selectLanguage']) && $_POST['plugin_i18n_selectLanguage']==$file)
                     {
@@ -150,14 +151,12 @@ function i18n_plugin_AddForm(){
                 }
 
     echo '    </select> '._t('P_I18N_COPY_TO').'
-              <input type="text" value="" placeholder="ex: ./locale/xx.json" name="plugin_i18n_copyFileDest">
+              <input type="text" value="" placeholder="./templates/theme/locale/xx.json" name="plugin_i18n_copyFileDest">
               <input type="submit" value="'._t('P_I18N_BTN_COPY_FILE').'" class="button">
           </form>
           <form action="settings.php#i18n" method="POST">
               <select name="plugin_i18n_selectLanguage">';
 
-                //$filesLeed = glob('./locale/*.json');
-                //$filesLeed = array_merge($filesLeed,glob('./plugins/*/locale/*.json'));
                 foreach($filesLeed as $file){
                     if (isset($_POST['plugin_i18n_selectLanguage']) && $_POST['plugin_i18n_selectLanguage']==$file)
                     {
@@ -166,6 +165,72 @@ function i18n_plugin_AddForm(){
                         echo '<option value="'.$file.'">'.$file.'</option>';
                     }
                 }
+
+    echo '    </select>
+              <input type="submit" value="'._t('P_I18N_BTN_LOAD_FILE').'" class="button">
+          </form>';
+    echo '<h3>'._t('P_I18N_MANAGE_PLUGIN_LNG').'</h3>
+            <form action="settings.php#i18n" method="POST">
+              <select name="plugin_i18n_copyLanguage">';
+
+                $filesLeed = glob('./plugins/*/locale/*.json');
+                foreach($filesLeed as $file){
+                    if (isset($_POST['plugin_i18n_selectLanguage']) && $_POST['plugin_i18n_selectLanguage']==$file)
+                    {
+                        echo '<option selected=selected value="'.$file.'">'.$file.'</option>';
+                    } else {
+                        echo '<option value="'.$file.'">'.$file.'</option>';
+                    }
+                }
+
+                echo '    </select> '._t('P_I18N_COPY_TO').'
+                          <input type="text" value="" placeholder="./plugins/plug/locale/xx.json" name="plugin_i18n_copyFileDest">
+                          <input type="submit" value="'._t('P_I18N_BTN_COPY_FILE').'" class="button">
+                      </form>
+                      <form action="settings.php#i18n" method="POST">
+                          <select name="plugin_i18n_selectLanguage">';
+
+                foreach($filesLeed as $file){
+                    if (isset($_POST['plugin_i18n_selectLanguage']) && $_POST['plugin_i18n_selectLanguage']==$file)
+                    {
+                        echo '<option selected=selected value="'.$file.'">'.$file.'</option>';
+                    } else {
+                        echo '<option value="'.$file.'">'.$file.'</option>';
+                    }
+                }
+
+    echo '    </select>
+              <input type="submit" value="'._t('P_I18N_BTN_LOAD_FILE').'" class="button">
+          </form>';
+    echo '<h3>Gestion des fichiers de langues de Leed</h3>
+            <form action="settings.php#i18n" method="POST">
+              <select name="plugin_i18n_copyLanguage">';
+
+    $filesLeed = glob('./install/locale/*.json');
+    foreach($filesLeed as $file){
+        if (isset($_POST['plugin_i18n_selectLanguage']) && $_POST['plugin_i18n_selectLanguage']==$file)
+        {
+            echo '<option selected=selected value="'.$file.'">'.$file.'</option>';
+        } else {
+            echo '<option value="'.$file.'">'.$file.'</option>';
+        }
+    }
+
+    echo '    </select> '._t('P_I18N_COPY_TO').'
+                          <input type="text" value="" placeholder="ex: ./install/locale/xx.json" name="plugin_i18n_copyFileDest">
+                          <input type="submit" value="'._t('P_I18N_BTN_COPY_FILE').'" class="button">
+                      </form>
+                      <form action="settings.php#i18n" method="POST">
+                          <select name="plugin_i18n_selectLanguage">';
+
+    foreach($filesLeed as $file){
+        if (isset($_POST['plugin_i18n_selectLanguage']) && $_POST['plugin_i18n_selectLanguage']==$file)
+        {
+            echo '<option selected=selected value="'.$file.'">'.$file.'</option>';
+        } else {
+            echo '<option value="'.$file.'">'.$file.'</option>';
+        }
+    }
 
     echo '    </select>
               <input type="submit" value="'._t('P_I18N_BTN_LOAD_FILE').'" class="button">
@@ -179,7 +244,13 @@ function i18n_plugin_AddForm(){
 
         // On scan tous les tags de Leed
         $foundTags = array();
-        $foundTags = plugin_i18n_scanTags(dirname($selectLanguage).'/../', 'plugins');
+        if (stripos(dirname($selectLanguage),'./install/') === false){
+            $foundTags = plugin_i18n_scanTags(dirname($selectLanguage).'/../', 'plugins');
+        } else {
+            // on est dans le répertoire ./install/locale/fr.json
+            $foundTags = plugin_i18n_scanTags('./', 'plugins', 'templates');
+        }
+
         // On charge le fichier de langue existant
         $currentLanguage = json_decode(file_get_contents($selectLanguage),true);
         ksort($currentLanguage);
@@ -194,18 +265,20 @@ function i18n_plugin_AddForm(){
                 </tr>';
         $language = substr(basename($_POST['plugin_i18n_selectLanguage']),0,2);
         foreach($currentLanguage as $key=>$value){
-        echo ' <tr>
-                    <td class="i18n_border i18n_textcenter">'.$key.'</td>
-                    <td class="i18n_border i18n_textcenter">';
-                    $value = htmlentities($value,ENT_COMPAT,'UTF-8');
-                    if(strlen($value)>100){
-                        echo '<textarea name="'.$key.'">'.$value.'</textarea>';
-                    }else{
-                        echo '<input type="text" name="'.$key.'" value="'.$value.'">';
-                    }
-        echo '      </td>
-                    <td class="i18n_a">&nbsp;<a style="color:#fff" target="_blank" href="http://translate.google.fr/#auto/'.$language.'/'.$value.'" title="'._t('P_I18N_TRANSLATE').'">T</a></td>
-              </tr>';
+            if(in_array($key, $foundTags, true)){
+                echo ' <tr>
+                            <td class="i18n_border i18n_textcenter">'.$key.'</td>
+                            <td class="i18n_border i18n_textcenter">';
+                            $value = htmlentities($value,ENT_COMPAT,'UTF-8');
+                            if(strlen($value)>100){
+                                echo '<textarea name="'.$key.'">'.$value.'</textarea>';
+                            }else{
+                                echo '<input type="text" name="'.$key.'" value="'.$value.'">';
+                            }
+                echo '      </td>
+                            <td class="i18n_a">&nbsp;<a style="color:#fff" target="_blank" href="http://translate.google.fr/#auto/'.$language.'/'.$value.'" title="'._t('P_I18N_TRANSLATE').'">T</a></td>
+                      </tr>';
+            }
         }
         echo '</table>';
 
@@ -241,15 +314,15 @@ function i18n_plugin_AddForm(){
 }
 
 // scanner les tags de traduction dans Leed
-function plugin_i18n_scanTags($dir, $exclude=''){
+function plugin_i18n_scanTags($dir, $exclude='', $exclude2=''){
     $return = array();
     $extensions = array('html','php','js');
     $leedFiles = scandir($dir);
     //var_dump($leedFiles);
     foreach($leedFiles as $file){
-        if($file!='.' && $file!='..' && $file!='.git' && $file!=$exclude){
+        if($file!='.' && $file!='..' && $file!='.git' && $file!=$exclude && $file!=$exclude2){
             if(is_dir($dir.$file)){
-                $return = array_merge($return,plugin_i18n_scanTags($dir.$file.'/', $exclude));
+                $return = array_merge($return,plugin_i18n_scanTags($dir.$file.'/', $exclude, $exclude2));
             }else{
                 $ext = str_replace('.rtpl.php','.wrongphp',$file);
                 $ext = strtolower(substr($ext,strrpos($ext,'.')+1));
