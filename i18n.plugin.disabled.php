@@ -79,7 +79,7 @@ function i18n_plugin_AddForm(){
     }
 
     // Gestion des erreurs PHP possible permettant l'écriture de fichier dans les répertoires de Leed
-    if(!is_writable('./install/locale/')){
+    if(!is_writable('./locale/')){
         $test['Erreur'][]=_t('P_I18N_VERIF_ERR1');
     }
     if (!@function_exists('file_get_contents')){
@@ -206,7 +206,7 @@ function i18n_plugin_AddForm(){
             <form action="settings.php#i18n" method="POST">
               <select name="plugin_i18n_copyLanguage">';
 
-    $filesLeed = glob('./install/locale/*.json');
+    $filesLeed = glob('./locale/*.json');
     foreach($filesLeed as $file){
         if (isset($_POST['plugin_i18n_selectLanguage']) && $_POST['plugin_i18n_selectLanguage']==$file)
         {
@@ -217,7 +217,7 @@ function i18n_plugin_AddForm(){
     }
 
     echo '    </select> '._t('P_I18N_COPY_TO').'
-                          <input type="text" value="" placeholder="ex: ./install/locale/xx.json" name="plugin_i18n_copyFileDest">
+                          <input type="text" value="" placeholder="ex: ./locale/xx.json" name="plugin_i18n_copyFileDest">
                           <input type="submit" value="'._t('P_I18N_BTN_COPY_FILE').'" class="button">
                       </form>
                       <form action="settings.php#i18n" method="POST">
@@ -244,10 +244,10 @@ function i18n_plugin_AddForm(){
 
         // On scan tous les tags de Leed
         $foundTags = array();
-        if (stripos(dirname($selectLanguage),'./install/') === false){
+        if (stripos(dirname($selectLanguage),'./') === false){
             $foundTags = plugin_i18n_scanTags(dirname($selectLanguage).'/../', 'plugins');
         } else {
-            // on est dans le répertoire ./install/locale/fr.json
+            // on est dans le répertoire ./locale/fr.json
             $foundTags = plugin_i18n_scanTags('./', 'plugins', 'templates');
         }
 
